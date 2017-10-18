@@ -649,7 +649,7 @@ private:
 
     // set when we are upgrading parameters from 3.4
     bool upgrading_frame_params;
-    
+
     static const AP_Scheduler::Task scheduler_tasks[];
     static const AP_Param::Info var_info[];
     static const struct LogStructure log_structure[];
@@ -960,6 +960,8 @@ private:
     void parachute_check();
     void parachute_release();
     void parachute_manual_release();
+    bool random_init(bool ignore_checks);
+    void random_run();
 
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
     bool avoid_adsb_init(bool ignore_checks);
