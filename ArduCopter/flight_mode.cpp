@@ -50,6 +50,10 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             #endif
             break;
 
+        case RANDOM:
+            success = random_init(ignore_checks);
+            break;
+
         case ALT_HOLD:
             success = althold_init(ignore_checks);
             break;
@@ -130,12 +134,12 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
 #if FRAME_CONFIG == HELI_FRAME
 failed:
 #endif
-    
+
     // update flight mode
     if (success) {
         // perform any cleanup required by previous flight mode
         exit_mode(control_mode, mode);
-        
+
         prev_control_mode = control_mode;
         prev_control_mode_reason = control_mode_reason;
 
@@ -151,11 +155,11 @@ failed:
         // but it should be harmless to disable the fence temporarily in these situations as well
         fence.manual_recovery_start();
 #endif
-        
+
 #if FRSKY_TELEM_ENABLED == ENABLED
         frsky_telemetry.update_control_mode(control_mode);
 #endif
-        
+
     } else {
         // Log error that we failed to enter desired flight mode
         Log_Write_Error(ERROR_SUBSYSTEM_FLIGHT_MODE,mode);
@@ -193,6 +197,10 @@ void Copter::update_flight_mode()
             #else
                 stabilize_run();
             #endif
+            break;
+
+        case RANDOM:
+            random_run();
             break;
 
         case ALT_HOLD:
@@ -396,6 +404,9 @@ void Copter::notify_flight_mode(control_mode_t mode)
     switch (mode) {
         case STABILIZE:
             notify.set_flight_mode_str("STAB");
+            break;
+        case RANDOM:
+            notify.set_flight_mode_str("RAND");
             break;
         case ACRO:
             notify.set_flight_mode_str("ACRO");
