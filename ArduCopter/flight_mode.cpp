@@ -54,6 +54,10 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             success = random_init(ignore_checks);
             break;
 
+        case CLARISSE:
+            success = clarisse_init(ignore_checks);
+            break;
+
         case ALT_HOLD:
             success = althold_init(ignore_checks);
             break;
@@ -201,6 +205,10 @@ void Copter::update_flight_mode()
 
         case RANDOM:
             random_run();
+            break;
+
+        case CLARISSE:
+            clarisse_run();
             break;
 
         case ALT_HOLD:
@@ -407,6 +415,9 @@ void Copter::notify_flight_mode(control_mode_t mode)
             break;
         case RANDOM:
             notify.set_flight_mode_str("RAND");
+            break;
+        case CLARISSE:
+            notify.set_flight_mode_str("CLAR");
             break;
         case ACRO:
             notify.set_flight_mode_str("ACRO");

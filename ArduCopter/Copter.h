@@ -959,6 +959,8 @@ private:
     void parachute_manual_release();
     bool random_init(bool ignore_checks);
     void random_run();
+    bool clarisse_init(bool ignore_checks);
+    void clarisse_run();
 
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
     bool avoid_adsb_init(bool ignore_checks);
