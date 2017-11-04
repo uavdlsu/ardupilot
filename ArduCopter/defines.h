@@ -71,10 +71,15 @@ enum aux_sw_func {
     AUXSW_AVOID_PROXIMITY =     40,  // enable object avoidance using proximity sensors (ie. horizontal lidar)
     AUXSW_ARMDISARM =           41,  // arm or disarm vehicle
     AUXSW_SMART_RTL =           42, // change to SmartRTL flight mode
+
     AUXSW_INVERTED  =           43,  // enable inverted flight
     AUXSW_WINCH_ENABLE =        44, // winch enable/disable
     AUXSW_WINCH_CONTROL =       45, // winch control
+
+    AUXSW_CLARISSE =            46, // testing
+
     AUXSW_SWITCH_MAX,
+
 };
 
 // Frame types

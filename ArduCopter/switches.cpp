@@ -73,7 +73,7 @@ void Copter::read_control_switch()
 // check_if_auxsw_mode_used - Check to see if any of the Aux Switches are set to a given mode.
 bool Copter::check_if_auxsw_mode_used(uint8_t auxsw_mode_check)
 {
-    bool ret = g.ch7_option == auxsw_mode_check || g.ch8_option == auxsw_mode_check || g.ch9_option == auxsw_mode_check 
+    bool ret = g.ch7_option == auxsw_mode_check || g.ch8_option == auxsw_mode_check || g.ch9_option == auxsw_mode_check
                 || g.ch10_option == auxsw_mode_check || g.ch11_option == auxsw_mode_check || g.ch12_option == auxsw_mode_check;
 
     return ret;
@@ -175,7 +175,7 @@ void Copter::init_aux_switches()
 
 // init_aux_switch_function - initialize aux functions
 void Copter::init_aux_switch_function(int8_t ch_option, uint8_t ch_flag)
-{    
+{
     // init channel options
     switch(ch_option) {
         case AUXSW_SIMPLE_MODE:
@@ -196,8 +196,12 @@ void Copter::init_aux_switch_function(int8_t ch_option, uint8_t ch_flag)
         case AUXSW_AVOID_ADSB:
         case AUXSW_PRECISION_LOITER:
         case AUXSW_AVOID_PROXIMITY:
+
         case AUXSW_INVERTED:
         case AUXSW_WINCH_ENABLE:
+
+        case AUXSW_CLARISSE:
+
             do_aux_switch_function(ch_option, ch_flag);
             break;
     }
@@ -608,7 +612,8 @@ void Copter::do_aux_switch_function(int8_t ch_function, uint8_t ch_flag)
                 }
             }
             break;
-            
+
+
         case AUXSW_INVERTED:
 #if FRAME_CONFIG == HELI_FRAME
             switch (ch_flag) {
@@ -657,6 +662,26 @@ void Copter::do_aux_switch_function(int8_t ch_function, uint8_t ch_flag)
                     break;
                 }
             break;
+
+
+            ///Ardupilot Training
+            case AUXSW_CLARISSE:
+                if (ch_flag == AUX_SWITCH_HIGH) {
+                    AP_Notify::flags.esc_calibration = true;
+                    gcs().send_text(MAV_SEVERITY_CRITICAL, "calibration true");// "_CRITICAL" to appear in HUD
+                } else {
+                    AP_Notify::flags.esc_calibration = false;
+                    gcs().send_text(MAV_SEVERITY_CRITICAL, "calibration false");
+                    }
+
+                DataFlash_Class::instance()->Log_Write("CLB","Status","b",ch_flag);
+
+
+                break;
+            ///
+
+
+
     }
 }
 
@@ -697,4 +722,3 @@ void Copter::auto_trim()
         }
     }
 }
-
