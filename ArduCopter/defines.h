@@ -105,6 +105,7 @@ enum control_mode_t {
     GUIDED_NOGPS = 20,  // guided mode but only accepts attitude and altitude
     SMART_RTL =    21,  // SMART_RTL returns to home by retracing its steps
     RANDOM =       22,  // flight mode created by Clarisse
+    P2PFLIGHT =    23,  // flight mode for toolkit - UAV DLSU
 };
 
 enum mode_reason_t {

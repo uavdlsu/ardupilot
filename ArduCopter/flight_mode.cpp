@@ -54,6 +54,10 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             success = random_init(ignore_checks);
             break;
 
+        case P2PFLIGHT:
+            success = p2pflight_init(ignore_checks);
+            break;
+
         case ALT_HOLD:
             success = althold_init(ignore_checks);
             break;
@@ -203,6 +207,10 @@ void Copter::update_flight_mode()
             random_run();
             break;
 
+        case P2PFLIGHT:
+            p2pflight_run();
+            break;
+
         case ALT_HOLD:
             althold_run();
             break;
@@ -348,6 +356,7 @@ bool Copter::mode_requires_GPS(control_mode_t mode)
         case POSHOLD:
         case BRAKE:
         case AVOID_ADSB:
+        case P2PFLIGHT:
         case THROW:
             return true;
         default:
@@ -407,6 +416,9 @@ void Copter::notify_flight_mode(control_mode_t mode)
             break;
         case RANDOM:
             notify.set_flight_mode_str("RAND");
+            break;
+        case P2PFLIGHT:
+            notify.set_flight_mode_str("P2PF");
             break;
         case ACRO:
             notify.set_flight_mode_str("ACRO");
