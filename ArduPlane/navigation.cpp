@@ -212,7 +212,7 @@ void Plane::update_loiter(uint16_t radius)
 
 void Plane::update_marc()
 {
-        if (get_distance(current_loc, next_WP_loc) > 50) {
+        if (get_distance(current_loc, next_WP_loc) > 20) {
         // if never reached loiter point and using crosstrack and somewhat far away from loiter point
         // navigate to it like in auto-mode for normal crosstrack behavior
         nav_controller->update_waypoint(prev_WP_loc, next_WP_loc);
