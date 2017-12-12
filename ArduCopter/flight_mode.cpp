@@ -54,8 +54,12 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             success = random_init(ignore_checks);
             break;
 
+        case RECORD_WP:
+            success = recordwp_init(ignore_checks);
+
         case P2PFLIGHT:
             success = p2pflight_init(ignore_checks);
+
             break;
 
         case ALT_HOLD:
@@ -205,6 +209,10 @@ void Copter::update_flight_mode()
 
         case RANDOM:
             random_run();
+            break;
+
+       case RECORD_WP:
+            recordwp_run();
             break;
 
         case P2PFLIGHT:
@@ -416,6 +424,10 @@ void Copter::notify_flight_mode(control_mode_t mode)
             break;
         case RANDOM:
             notify.set_flight_mode_str("RAND");
+            break;
+
+        case RECORD_WP:
+            notify.set_flight_mode_str("RECO");
             break;
         case P2PFLIGHT:
             notify.set_flight_mode_str("P2PF");
