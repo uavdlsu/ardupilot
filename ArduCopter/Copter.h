@@ -961,6 +961,8 @@ private:
     void random_run();
     bool clarisse_init(bool ignore_checks);
     void clarisse_run();
+    bool recordwp_init(bool ignore_checks);
+    void recordwp_run();
 
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
     bool avoid_adsb_init(bool ignore_checks);
