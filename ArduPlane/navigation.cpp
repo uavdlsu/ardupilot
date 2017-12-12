@@ -217,7 +217,7 @@ void Plane::update_marc()
         // navigate to it like in auto-mode for normal crosstrack behavior
         nav_controller->update_waypoint(prev_WP_loc, next_WP_loc);
         } else {
-        nav_controller->update_loiter(next_WP_loc, 10, 1);
+        nav_controller->update_loiter(next_WP_loc, 40, 1);
     }
 }
 
