@@ -961,6 +961,10 @@ private:
     void random_run();
     bool clarisse_init(bool ignore_checks);
     void clarisse_run();
+    bool marked_rtl_init(bool ignore_checks);
+    void marked_rtl_run();
+    bool defined_rtl_init(bool ignore_checks);
+    void defined_rtl_run();
 
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
     bool avoid_adsb_init(bool ignore_checks);
