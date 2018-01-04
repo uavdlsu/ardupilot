@@ -965,6 +965,17 @@ private:
     void marked_rtl_run();
     bool defined_rtl_init(bool ignore_checks);
     void defined_rtl_run();
+    bool recordwp_init(bool ignore_checks);
+    void recordwp_run();
+    bool p2pflight_init(bool ignore_checks);
+    void p2pflight_run();
+    void p2pflight_arm_check();
+    void p2pflight_motors_full_range();
+    void p2pflight_change_wp();
+    void p2pflight_waypoint_path_tracker();
+    void p2pflight_update_altitude();    
+    void p2pflight_attitude_controller();
+
 
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
     bool avoid_adsb_init(bool ignore_checks);

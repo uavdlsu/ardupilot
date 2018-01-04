@@ -54,8 +54,12 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             success = random_init(ignore_checks);
             break;
 
-        case CLARISSE:
-            success = clarisse_init(ignore_checks);
+        case RECORD_WP:
+            success = recordwp_init(ignore_checks);
+
+        case P2PFLIGHT:
+            success = p2pflight_init(ignore_checks);
+
             break;
 
         case MARKED_RTL:
@@ -215,8 +219,12 @@ void Copter::update_flight_mode()
             random_run();
             break;
 
-        case CLARISSE:
-            clarisse_run();
+       case RECORD_WP:
+            recordwp_run();
+            break;
+
+        case P2PFLIGHT:
+            p2pflight_run();
             break;
 
         case MARKED_RTL:
@@ -372,6 +380,7 @@ bool Copter::mode_requires_GPS(control_mode_t mode)
         case POSHOLD:
         case BRAKE:
         case AVOID_ADSB:
+        case P2PFLIGHT:
         case THROW:
             return true;
         default:
@@ -432,8 +441,12 @@ void Copter::notify_flight_mode(control_mode_t mode)
         case RANDOM:
             notify.set_flight_mode_str("RAND");
             break;
-        case CLARISSE:
-            notify.set_flight_mode_str("CLAR");
+
+        case RECORD_WP:
+            notify.set_flight_mode_str("RECO");
+            break;
+        case P2PFLIGHT:
+            notify.set_flight_mode_str("P2PF");
             break;
         case MARKED_RTL:
             notify.set_flight_mode_str("MARK");
