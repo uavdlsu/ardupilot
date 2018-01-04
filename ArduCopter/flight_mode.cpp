@@ -62,6 +62,14 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
 
             break;
 
+        case MARKED_RTL:
+            success = marked_rtl_init(ignore_checks);
+            break;
+
+       case DEFINED_RTL:
+            success = defined_rtl_init(ignore_checks);
+            break;
+
         case ALT_HOLD:
             success = althold_init(ignore_checks);
             break;
@@ -217,6 +225,14 @@ void Copter::update_flight_mode()
 
         case P2PFLIGHT:
             p2pflight_run();
+            break;
+
+        case MARKED_RTL:
+            marked_rtl_run();
+            break;
+
+        case DEFINED_RTL:
+            defined_rtl_run();
             break;
 
         case ALT_HOLD:
@@ -431,6 +447,12 @@ void Copter::notify_flight_mode(control_mode_t mode)
             break;
         case P2PFLIGHT:
             notify.set_flight_mode_str("P2PF");
+            break;
+        case MARKED_RTL:
+            notify.set_flight_mode_str("MARK");
+            break;
+        case DEFINED_RTL:
+            notify.set_flight_mode_str("DEFI");
             break;
         case ACRO:
             notify.set_flight_mode_str("ACRO");

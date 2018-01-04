@@ -959,12 +959,14 @@ private:
     void parachute_manual_release();
     bool random_init(bool ignore_checks);
     void random_run();
-
     bool clarisse_init(bool ignore_checks);
     void clarisse_run();
+    bool marked_rtl_init(bool ignore_checks);
+    void marked_rtl_run();
+    bool defined_rtl_init(bool ignore_checks);
+    void defined_rtl_run();
     bool recordwp_init(bool ignore_checks);
     void recordwp_run();
-
     bool p2pflight_init(bool ignore_checks);
     void p2pflight_run();
     void p2pflight_arm_check();
@@ -973,7 +975,6 @@ private:
     void p2pflight_waypoint_path_tracker();
     void p2pflight_update_altitude();    
     void p2pflight_attitude_controller();
-
 
 
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
