@@ -1,4 +1,5 @@
 #include "Copter.h"
+//uint16_t waypoint_length;
 
 // start_command - this function will be called when the ap_mission lib wishes to start a new command
 bool Copter::start_command(const AP_Mission::Mission_Command& cmd)
@@ -88,16 +89,16 @@ bool Copter::start_command(const AP_Mission::Mission_Command& cmd)
     case MAV_CMD_DO_SET_SERVO:
         ServoRelayEvents.do_set_servo(cmd.content.servo.channel, cmd.content.servo.pwm);
         break;
-        
+
     case MAV_CMD_DO_SET_RELAY:
         ServoRelayEvents.do_set_relay(cmd.content.relay.num, cmd.content.relay.state);
         break;
-        
+
     case MAV_CMD_DO_REPEAT_SERVO:
         ServoRelayEvents.do_repeat_servo(cmd.content.repeat_servo.channel, cmd.content.repeat_servo.pwm,
                                          cmd.content.repeat_servo.repeat_count, cmd.content.repeat_servo.cycle_time * 1000.0f);
         break;
-        
+
     case MAV_CMD_DO_REPEAT_RELAY:
         ServoRelayEvents.do_repeat_relay(cmd.content.repeat_relay.num, cmd.content.repeat_relay.repeat_count,
                                          cmd.content.repeat_relay.cycle_time * 1000.0f);
@@ -112,7 +113,7 @@ bool Copter::start_command(const AP_Mission::Mission_Command& cmd)
         // point the camera to a specified angle
         do_mount_control(cmd);
         break;
-    
+
     case MAV_CMD_DO_FENCE_ENABLE:
 #if AC_FENCE == ENABLED
         if (cmd.p1 == 0) { //disable
@@ -321,6 +322,9 @@ void Copter::do_takeoff(const AP_Mission::Mission_Command& cmd)
 // do_nav_wp - initiate move to next waypoint
 void Copter::do_nav_wp(const AP_Mission::Mission_Command& cmd)
 {
+    //AP_Mission::Mission_Command wp_cmd;
+    //waypoint_length=mission.num_commands();
+    //mission.read_cmd_from_storage(waypoint_length,cmd);
     Location_Class target_loc(cmd.content.location);
     // use current lat, lon if zero
     if (target_loc.lat == 0 && target_loc.lng == 0) {
@@ -338,7 +342,7 @@ void Copter::do_nav_wp(const AP_Mission::Mission_Command& cmd)
             target_loc.set_alt_cm(current_loc.alt, current_loc.get_alt_frame());
         }
     }
-    
+
     // this will be used to remember the time in millis after we reach or pass the WP.
     loiter_time = 0;
     // this is the delay, stored in seconds
@@ -346,6 +350,7 @@ void Copter::do_nav_wp(const AP_Mission::Mission_Command& cmd)
 
     // Set wp navigation target
     auto_wp_start(target_loc);
+    //cmd = wp_cmd;
 
     // if no delay set the waypoint as "fast"
     if (loiter_time_max == 0 ) {
