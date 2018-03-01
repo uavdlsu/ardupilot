@@ -105,6 +105,9 @@ enum control_mode_t {
     GUIDED_NOGPS = 20,  // guided mode but only accepts attitude and altitude
     SMART_RTL =    21,  // SMART_RTL returns to home by retracing its steps
     RANDOM =       22,  // flight mode created by Clarisse
+    CLARISSE =     23,  // Clarisse flight mode
+    MARKED_RTL =   24,  // RTL path is defined by marking points during flight
+    DEFINED_RTL =  25,  // RTL path is defined by setting waypoints before flight
 };
 
 enum mode_reason_t {

@@ -1,5 +1,8 @@
 #include "Copter.h"
 
+//static int16_t waypoint_length;
+//static int16_t waypoint_index=0;
+
 /*
  * Init and run calls for auto flight mode
  *
@@ -202,10 +205,20 @@ void Copter::auto_takeoff_run()
 // auto_wp_start - initialises waypoint controller to implement flying to a particular destination
 void Copter::auto_wp_start(const Vector3f& destination)
 {
+    //AP_Mission::Mission_Command cmd;
     auto_mode = Auto_WP;
 
     // initialise wpnav (no need to check return status because terrain data is not used)
     wp_nav->set_wp_destination(destination, false);
+
+    //hal.console->printf(" lat:%ld lng:%ld alt:%ld\n", (long)cmd.content.location.lat, (long)cmd.content.location.lng, (long)cmd.content.location.alt);
+
+  //  if (wp_nav->reached_wp_destination()){
+  //     waypoint_index++;
+  //     if (waypoint_index == waypoint_length){
+  //       waypoint_index = 0;
+  //    }
+  //   }
 
     // initialise yaw
     // To-Do: reset the yaw only when the previous navigation command is not a WP.  this would allow removing the special check for ROI
@@ -286,7 +299,7 @@ void Copter::auto_wp_run()
 // auto_spline_start - initialises waypoint controller to implement flying to a particular destination using the spline controller
 //  seg_end_type can be SEGMENT_END_STOP, SEGMENT_END_STRAIGHT or SEGMENT_END_SPLINE.  If Straight or Spline the next_destination should be provided
 void Copter::auto_spline_start(const Location_Class& destination, bool stopped_at_start,
-                               AC_WPNav::spline_segment_end_type seg_end_type, 
+                               AC_WPNav::spline_segment_end_type seg_end_type,
                                const Location_Class& next_destination)
 {
     auto_mode = Auto_Spline;
@@ -406,7 +419,7 @@ void Copter::auto_land_run()
 
     // set motors to full range
     motors->set_desired_spool_state(AP_Motors::DESIRED_THROTTLE_UNLIMITED);
-    
+
     land_run_horizontal_control();
     land_run_vertical_control();
 }

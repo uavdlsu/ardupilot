@@ -98,7 +98,7 @@ void Plane::read_airspeed(void)
     // when airspeed is disabled as TECS may be using synthetic
     // airspeed for a quadplane transition
     calc_airspeed_errors();
-    
+
     // update smoothed airspeed estimate
     float aspeed;
     if (ahrs.airspeed_estimate(&aspeed)) {
@@ -129,7 +129,7 @@ void Plane::read_battery(void)
     if (battery.get_type() != AP_BattMonitor::BattMonitor_TYPE_NONE) {
         AP_Notify::flags.battery_voltage = battery.voltage();
     }
-    
+
     if (should_log(MASK_LOG_CURRENT)) {
         Log_Write_Current();
     }
@@ -257,13 +257,14 @@ void Plane::update_sensor_status_flags(void)
     case TRAINING:
         if (!training_manual_roll || !training_manual_pitch) {
             control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_ANGULAR_RATE_CONTROL; // 3D angular rate control
-            control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION; // attitude stabilisation        
+            control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_ATTITUDE_STABILIZATION; // attitude stabilisation
         }
         break;
 
     case AUTO:
     case RTL:
     case LOITER:
+    case MARC:
     case AVOID_ADSB:
     case GUIDED:
     case CIRCLE:
@@ -361,7 +362,7 @@ void Plane::update_sensor_status_flags(void)
             control_sensors_enabled |= MAV_SYS_STATUS_SENSOR_LASER_POSITION;
         }
         if (rangefinder.has_data_orient(ROTATION_PITCH_270)) {
-            control_sensors_health |= MAV_SYS_STATUS_SENSOR_LASER_POSITION;            
+            control_sensors_health |= MAV_SYS_STATUS_SENSOR_LASER_POSITION;
         }
     }
 
