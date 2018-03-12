@@ -54,8 +54,16 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             success = random_init(ignore_checks);
             break;
 
-        case SAMPLE:
-            success = sample_init(ignore_checks);
+        case CLARISSE:
+            success = clarisse_init(ignore_checks);
+            break;
+
+        case MARKED_RTL:
+            success = marked_rtl_init(ignore_checks);
+            break;
+
+       case DEFINED_RTL:
+            success = defined_rtl_init(ignore_checks);
             break;
 
         case ALT_HOLD:
@@ -207,8 +215,16 @@ void Copter::update_flight_mode()
             random_run();
             break;
 
-        case SAMPLE:
-            sample_run();
+        case CLARISSE:
+            clarisse_run();
+            break;
+
+        case MARKED_RTL:
+            marked_rtl_run();
+            break;
+
+        case DEFINED_RTL:
+            defined_rtl_run();
             break;
 
         case ALT_HOLD:
@@ -415,6 +431,15 @@ void Copter::notify_flight_mode(control_mode_t mode)
             break;
         case RANDOM:
             notify.set_flight_mode_str("RAND");
+            break;
+        case CLARISSE:
+            notify.set_flight_mode_str("CLAR");
+            break;
+        case MARKED_RTL:
+            notify.set_flight_mode_str("MARK");
+            break;
+        case DEFINED_RTL:
+            notify.set_flight_mode_str("DEFI");
             break;
         case ACRO:
             notify.set_flight_mode_str("ACRO");
