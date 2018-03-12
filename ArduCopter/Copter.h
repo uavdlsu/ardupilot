@@ -960,6 +960,15 @@ private:
     bool random_init(bool ignore_checks);
     void random_run();
 
+    bool sample_init(bool ignore_checks);
+    void sample_run();
+    void sample_arm_check();
+    void sample_motors_full_range();
+    void sample_change_wp();
+    void sample_waypoint_path_tracker();
+    void sample_update_altitude();
+    void sample_attitude_controller();
+
     // support for AP_Avoidance custom flight mode, AVOID_ADSB
     bool avoid_adsb_init(bool ignore_checks);
     void avoid_adsb_run();

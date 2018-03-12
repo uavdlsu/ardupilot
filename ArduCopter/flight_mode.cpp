@@ -54,6 +54,10 @@ bool Copter::set_mode(control_mode_t mode, mode_reason_t reason)
             success = random_init(ignore_checks);
             break;
 
+        case SAMPLE:
+            success = sample_init(ignore_checks);
+            break;
+
         case ALT_HOLD:
             success = althold_init(ignore_checks);
             break;
@@ -201,6 +205,10 @@ void Copter::update_flight_mode()
 
         case RANDOM:
             random_run();
+            break;
+
+        case SAMPLE:
+            sample_run();
             break;
 
         case ALT_HOLD:
@@ -414,6 +422,11 @@ void Copter::notify_flight_mode(control_mode_t mode)
         case ALT_HOLD:
             notify.set_flight_mode_str("ALTH");
             break;
+
+        case SAMPLE:
+            notify.set_flight_mode_str("SAMP");
+            break;
+            
         case AUTO:
             notify.set_flight_mode_str("AUTO");
             break;
