@@ -612,6 +612,7 @@ void Plane::update_flight_mode(void)
     case RTL:
     case LOITER:
     case MARC:
+    case MARKED_RTL:
         calc_nav_roll();
         calc_nav_pitch();
         calc_throttle();
@@ -844,10 +845,14 @@ void Plane::update_navigation()
     case GUIDED:
         update_loiter(radius);
         break;
-        
+
     case MARC:
         update_marc();
         break;
+
+    case MARKED_RTL:
+         update_marked_rtl();
+         break;
 
     case CRUISE:
         update_cruise();

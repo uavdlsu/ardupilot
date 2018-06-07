@@ -265,6 +265,7 @@ void Plane::update_sensor_status_flags(void)
     case RTL:
     case LOITER:
     case MARC:
+    case MARKED_RTL:
     case AVOID_ADSB:
     case GUIDED:
     case CIRCLE:

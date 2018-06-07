@@ -879,7 +879,14 @@ void Plane::do_marc_at_location()
 {
     prev_WP_loc = current_loc;
     next_WP_loc = current_loc;
-    location_offset(next_WP_loc, 1000, 0);
+    location_offset(next_WP_loc, 300, 0);
+}
+
+void Plane::do_marked_rtl_at_location()
+{
+    prev_WP_loc = current_loc;
+    next_WP_loc = current_loc;
+    location_offset(next_WP_loc, 300, 0);
 }
 
 void Plane::do_change_speed(const AP_Mission::Mission_Command& cmd)

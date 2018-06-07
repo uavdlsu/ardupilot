@@ -889,6 +889,7 @@ private:
     bool verify_vtol_land(const AP_Mission::Mission_Command &cmd);
     void do_loiter_at_location();
     void do_marc_at_location();
+    void do_marked_rtl_at_location();
     bool verify_loiter_heading(bool init);
     void exit_mission_callback();
     void mavlink_delay(uint32_t ms);
@@ -929,6 +930,7 @@ private:
     void calc_gndspeed_undershoot();
     void update_loiter(uint16_t radius);
     void update_marc();
+    void update_marked_rtl();
     void update_cruise();
     void update_fbwb_speed_height(void);
     void setup_turn_angle(void);

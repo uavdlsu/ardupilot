@@ -606,6 +606,7 @@ bool Plane::allow_reverse_thrust(void)
 
     case LOITER:
     case MARC:
+    case MARKED_RTL:
         allow |= (g.use_reverse_thrust & USE_REVERSE_THRUST_LOITER);
         break;
     case RTL:

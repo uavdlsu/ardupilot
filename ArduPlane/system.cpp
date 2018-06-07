@@ -419,6 +419,12 @@ void Plane::set_mode(enum FlightMode mode, mode_reason_t reason)
         do_marc_at_location();
     		break;
 
+    case MARKED_RTL:
+        auto_throttle_mode = true;
+        auto_navigation_mode = true;
+        do_marked_rtl_at_location();
+        break;
+
     case AVOID_ADSB:
     case GUIDED:
         auto_throttle_mode = true;
@@ -634,6 +640,9 @@ void Plane::notify_flight_mode(enum FlightMode mode)
         break;
     case MARC:
         notify.set_flight_mode_str("MARC");
+        break;
+    case MARKED_RTL:
+        notify.set_flight_mode_str("MARKED_RTL");
         break;
     case AVOID_ADSB:
         notify.set_flight_mode_str("AVOI");

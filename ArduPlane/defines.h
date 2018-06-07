@@ -54,6 +54,7 @@ enum FlightMode {
     QLAND         = 20,
     QRTL          = 21,
     MARC          = 22,
+    MARKED_RTL    = 23,
 };
 
 enum mode_reason_t {
