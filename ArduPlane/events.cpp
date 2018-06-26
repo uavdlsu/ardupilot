@@ -39,6 +39,7 @@ void Plane::failsafe_short_on_event(enum failsafe_state fstype, mode_reason_t re
     case LOITER:
     case MARC:
     case MARKED_RTL:
+    case CORKSCREW:
         if(g.short_fs_action != 0) {
             failsafe.saved_mode = control_mode;
             failsafe.saved_mode_set = 1;
@@ -101,6 +102,7 @@ void Plane::failsafe_long_on_event(enum failsafe_state fstype, mode_reason_t rea
     case LOITER:
     case MARC:
     case MARKED_RTL:
+    case CORKSCREW:
         if(g.long_fs_action == 3) {
 #if PARACHUTE == ENABLED
             parachute_release();

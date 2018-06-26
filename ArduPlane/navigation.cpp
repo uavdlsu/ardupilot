@@ -232,6 +232,17 @@ void Plane::update_marked_rtl()
     }
 }
 
+void Plane::update_corkscrew()
+{
+        if (get_distance(current_loc, next_WP_loc) > 150) {
+        // if never reached loiter point and using crosstrack and somewhat far away from loiter point
+        // navigate to it like in auto-mode for normal crosstrack behavior
+        nav_controller->update_waypoint(prev_WP_loc, next_WP_loc);
+        } else {
+        nav_controller->update_loiter(next_WP_loc, 50, 1);
+    }
+}
+
 /*
   handle CRUISE mode, locking heading to GPS course when we have
   sufficient ground speed, and no aileron or rudder input

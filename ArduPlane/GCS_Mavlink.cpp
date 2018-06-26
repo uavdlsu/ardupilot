@@ -48,6 +48,7 @@ void Plane::send_heartbeat(mavlink_channel_t chan)
     case LOITER:
     case MARC:
     case MARKED_RTL:
+    case CORKSCREW:
     case AVOID_ADSB:
     case GUIDED:
     case CIRCLE:
@@ -1980,6 +1981,7 @@ bool GCS_MAVLINK_Plane::set_mode(const uint8_t mode)
     case LOITER:
     case MARC:
     case MARKED_RTL:
+    case CORKSCREW:
     case QSTABILIZE:
     case QHOVER:
     case QLOITER:

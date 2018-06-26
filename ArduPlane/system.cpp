@@ -425,6 +425,12 @@ void Plane::set_mode(enum FlightMode mode, mode_reason_t reason)
         do_marked_rtl_at_location();
         break;
 
+    case CORKSCREW:
+        auto_throttle_mode = true;
+        auto_navigation_mode = true;
+        do_corkscrew_at_location();
+        break;
+
     case AVOID_ADSB:
     case GUIDED:
         auto_throttle_mode = true;
@@ -642,7 +648,10 @@ void Plane::notify_flight_mode(enum FlightMode mode)
         notify.set_flight_mode_str("MARC");
         break;
     case MARKED_RTL:
-        notify.set_flight_mode_str("MARKED_RTL");
+        notify.set_flight_mode_str("MRTL");
+        break;
+    case CORKSCREW:
+        notify.set_flight_mode_str("CORK");
         break;
     case AVOID_ADSB:
         notify.set_flight_mode_str("AVOI");
