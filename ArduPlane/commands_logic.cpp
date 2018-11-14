@@ -1,4 +1,5 @@
 #include "Plane.h"
+static int16_t cork_offset;
 
 /********************************************************************************/
 // Command Event Handlers
@@ -498,14 +499,17 @@ void Plane::do_altitude_wait(const AP_Mission::Mission_Command& cmd)
 
 void Plane::do_loiter_to_alt(const AP_Mission::Mission_Command& cmd)
 {
-    //set target alt
-    Location loc = cmd.content.location;
-    location_sanitize(current_loc, loc);
-    set_next_WP(loc);
-    loiter_set_direction_wp(cmd);
+  //set target alt
+  Location loc = cmd.content.location;
+  hal.console->printf("Assigned alt = %.2f\n",(double)loc.alt);
+  hal.console->printf("Target alt before = %.2f\n",(double)target_altitude.amsl_cm);
+  location_sanitize(current_loc, loc);
+  set_next_WP(loc);
+  loiter_set_direction_wp(cmd);
+  hal.console->printf("Target alt after = %.2f\n",(double)target_altitude.amsl_cm);
 
-    // init to 0, set to 1 when altitude is reached
-    condition_value = 0;
+  // init to 0, set to 1 when altitude is reached
+  condition_value = 0;
 }
 
 /********************************************************************************/
@@ -717,6 +721,7 @@ bool Plane::verify_loiter_turns()
 bool Plane::verify_loiter_to_alt()
 {
     bool result = false;
+    hal.console->printf("updating loiter\n current alt: %f\n target alt: %f\n",(double)current_loc.alt/100,(double)target_altitude.amsl_cm/100);
     update_loiter(mission.get_current_nav_cmd().p1);
 
     // condition_value == 0 means alt has never been reached
@@ -879,7 +884,7 @@ void Plane::do_marc_at_location()
 {
     prev_WP_loc = current_loc;
     next_WP_loc = current_loc;
-    location_offset(next_WP_loc, 300, 0);
+    location_offset(next_WP_loc, g.marc_offset_nort, g.marc_offset_east);
 }
 
 void Plane::do_marked_rtl_at_location()
@@ -891,9 +896,29 @@ void Plane::do_marked_rtl_at_location()
 
 void Plane::do_corkscrew_at_location()
 {
-    prev_WP_loc = current_loc;
-    next_WP_loc = current_loc;
-    location_offset(next_WP_loc, 300, 0);
+  /////-------11/07, TEST 1-------/////
+  Location loc = gps.location();
+  cork_offset = labs((g.cork_alt*100)-current_loc.alt);
+  loc.alt = current_loc.alt + cork_offset; //EDIT ALT
+  //loc.alt = current_loc.alt + (g.cork_alt*100);
+  hal.console->printf("Assigned alt = %.2f\n",(double)loc.alt);
+  location_sanitize(current_loc, loc); ////////////////
+  set_next_WP(loc);
+  hal.console->printf("Target alt = %.2f\n",(double)target_altitude.amsl_cm);
+  gcs().send_text(MAV_SEVERITY_INFO, "Target alt: %f\n", (double)loc.alt/100);
+  cork_rad = labs(g.cork_radius);
+  loiter.direction = g.cork_radius/labs(g.cork_radius);
+  condition_value = 0;
+
+  // /////-------10/25, TEST 8-------/////
+  // Location loc = gps.location();
+  // loc.alt = current_loc.alt + 500; //EDIT ALT
+  // hal.console->printf("Assigned alt = %.2f\n",(double)loc.alt);
+  // location_sanitize(current_loc, loc); ////////////////
+  // set_next_WP(loc);
+  // hal.console->printf("Target alt = %.2f\n",(double)target_altitude.amsl_cm);
+  // loiter.direction = 1;
+  // condition_value = 0;
 }
 
 void Plane::do_change_speed(const AP_Mission::Mission_Command& cmd)

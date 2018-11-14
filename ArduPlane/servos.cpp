@@ -33,7 +33,7 @@ void Plane::throttle_slew_limit(void)
         }
     }
     // if slew limit rate is set to zero then do not slew limit
-    if (slewrate) {                   
+    if (slewrate) {
         SRV_Channels::limit_slew_rate(SRV_Channel::k_throttle, slewrate, G_Dt);
     }
 }
@@ -81,8 +81,8 @@ bool Plane::suppress_throttle(void)
     }
 
     bool gps_movement = (gps.status() >= AP_GPS::GPS_OK_FIX_2D && gps.ground_speed() >= 5);
-    
-    if (control_mode==AUTO && 
+
+    if (control_mode==AUTO &&
         auto_state.takeoff_complete == false) {
 
         uint32_t launch_duration_ms = ((int32_t)g.takeoff_throttle_delay)*100 + 2000;
@@ -98,7 +98,7 @@ bool Plane::suppress_throttle(void)
             return false;
         }
         if (auto_takeoff_check()) {
-            // we're in auto takeoff 
+            // we're in auto takeoff
             throttle_suppressed = false;
             auto_state.baro_takeoff_alt = barometer.get_altitude();
             return false;
@@ -106,7 +106,7 @@ bool Plane::suppress_throttle(void)
         // keep throttle suppressed
         return true;
     }
-    
+
     if (fabsf(relative_altitude) >= 10.0f) {
         // we're more than 10m from the home altitude
         throttle_suppressed = false;
@@ -120,7 +120,7 @@ bool Plane::suppress_throttle(void)
         if ((!ahrs.airspeed_sensor_enabled()) || airspeed.get_airspeed() >= 5) {
             // we're moving at more than 5 m/s
             throttle_suppressed = false;
-            return false;        
+            return false;
         }
     }
 
@@ -228,11 +228,11 @@ void Plane::set_servos_idle(void)
     if (auto_state.idle_wiggle_stage < 50) {
         servo_value = auto_state.idle_wiggle_stage * (4500 / 50);
     } else if (auto_state.idle_wiggle_stage < 100) {
-        servo_value = (100 - auto_state.idle_wiggle_stage) * (4500 / 50);        
+        servo_value = (100 - auto_state.idle_wiggle_stage) * (4500 / 50);
     } else if (auto_state.idle_wiggle_stage < 150) {
-        servo_value = (100 - auto_state.idle_wiggle_stage) * (4500 / 50);        
+        servo_value = (100 - auto_state.idle_wiggle_stage) * (4500 / 50);
     } else if (auto_state.idle_wiggle_stage < 200) {
-        servo_value = (auto_state.idle_wiggle_stage-200) * (4500 / 50);        
+        servo_value = (auto_state.idle_wiggle_stage-200) * (4500 / 50);
     } else {
         auto_state.idle_wiggle_stage = 0;
     }
@@ -264,14 +264,14 @@ void Plane::throttle_watt_limiter(int8_t &min_throttle, int8_t &max_throttle)
     if (battery.overpower_detected()) {
         // overpower detected, cut back on the throttle if we're maxing it out by calculating a limiter value
         // throttle limit will attack by 10% per second
-        
+
         if (SRV_Channels::get_output_scaled(SRV_Channel::k_throttle) > 0 && // demanding too much positive thrust
             throttle_watt_limit_max < max_throttle - 25 &&
             now - throttle_watt_limit_timer_ms >= 1) {
             // always allow for 25% throttle available regardless of battery status
             throttle_watt_limit_timer_ms = now;
             throttle_watt_limit_max++;
-            
+
         } else if (SRV_Channels::get_output_scaled(SRV_Channel::k_throttle) < 0 &&
                    min_throttle < 0 && // reverse thrust is available
                    throttle_watt_limit_min < -(min_throttle) - 25 &&
@@ -280,7 +280,7 @@ void Plane::throttle_watt_limiter(int8_t &min_throttle, int8_t &max_throttle)
             throttle_watt_limit_timer_ms = now;
             throttle_watt_limit_min++;
         }
-        
+
     } else if (now - throttle_watt_limit_timer_ms >= 1000) {
         // it has been 1 second since last over-current, check if we can resume higher throttle.
         // this throttle release is needed to allow raising the max_throttle as the battery voltage drains down
@@ -289,20 +289,20 @@ void Plane::throttle_watt_limiter(int8_t &min_throttle, int8_t &max_throttle)
             throttle_watt_limit_max > 0) { // and we're currently limiting it
             throttle_watt_limit_timer_ms = now;
             throttle_watt_limit_max--;
-            
+
         } else if (SRV_Channels::get_output_scaled(SRV_Channel::k_throttle) < throttle_watt_limit_min && // demanding max negative thrust
                    throttle_watt_limit_min > 0) { // and we're limiting it
             throttle_watt_limit_timer_ms = now;
             throttle_watt_limit_min--;
         }
     }
-    
+
     max_throttle = constrain_int16(max_throttle, 0, max_throttle - throttle_watt_limit_max);
     if (min_throttle < 0) {
         min_throttle = constrain_int16(min_throttle, min_throttle + throttle_watt_limit_min, 0);
     }
 }
-    
+
 
 
 /*
@@ -318,12 +318,12 @@ void Plane::set_servos_controlled(void)
     // convert 0 to 100% (or -100 to +100) into PWM
     int8_t min_throttle = aparm.throttle_min.get();
     int8_t max_throttle = aparm.throttle_max.get();
-    
+
     if (min_throttle < 0 && !allow_reverse_thrust()) {
         // reverse thrust is available but inhibited.
         min_throttle = 0;
     }
-    
+
     if (flight_stage == AP_Vehicle::FixedWing::FLIGHT_TAKEOFF || flight_stage == AP_Vehicle::FixedWing::FLIGHT_ABORT_LAND) {
         if(aparm.takeoff_throttle_max != 0) {
             max_throttle = aparm.takeoff_throttle_max;
@@ -333,13 +333,13 @@ void Plane::set_servos_controlled(void)
     } else if (landing.is_flaring()) {
         min_throttle = 0;
     }
-    
+
     // apply watt limiter
     throttle_watt_limiter(min_throttle, max_throttle);
-    
+
     SRV_Channels::set_output_scaled(SRV_Channel::k_throttle,
                                     constrain_int16(SRV_Channels::get_output_scaled(SRV_Channel::k_throttle), min_throttle, max_throttle));
-    
+
     if (!hal.util->get_soft_armed()) {
         if (arming.arming_required() == AP_Arming::YES_ZERO_PWM) {
             SRV_Channels::set_output_limit(SRV_Channel::k_throttle, SRV_Channel::SRV_CHANNEL_LIMIT_ZERO_PWM);
@@ -353,8 +353,8 @@ void Plane::set_servos_controlled(void)
             // manual pass through of throttle while throttle is suppressed
             SRV_Channels::set_output_scaled(SRV_Channel::k_throttle, channel_throttle->get_control_in_zero_dz());
         }
-    } else if (g.throttle_passthru_stabilize && 
-               (control_mode == STABILIZE || 
+    } else if (g.throttle_passthru_stabilize &&
+               (control_mode == STABILIZE ||
                 control_mode == TRAINING ||
                 control_mode == ACRO ||
                 control_mode == FLY_BY_WIRE_A ||
@@ -450,7 +450,7 @@ void Plane::set_servos_flaps(void)
     if (g.flap_slewrate) {
         SRV_Channels::limit_slew_rate(SRV_Channel::k_flap_auto, g.flap_slewrate, G_Dt);
         SRV_Channels::limit_slew_rate(SRV_Channel::k_flap, g.flap_slewrate, G_Dt);
-    }    
+    }
 
     // output to flaperons, if any
     flaperon_update(auto_flap_percent);
@@ -517,8 +517,8 @@ void Plane::set_servos(void)
     // servos_output(), which is run from all code paths in this
     // function
     hal.rcout->cork();
-    
-    // this is to allow the failsafe module to deliberately crash 
+
+    // this is to allow the failsafe module to deliberately crash
     // the plane. Only used in extreme circumstances to meet the
     // OBC rules
     if (afs.should_crash_vehicle()) {
@@ -527,7 +527,7 @@ void Plane::set_servos(void)
     }
 
     // do any transition updates for quadplane
-    quadplane.update();    
+    quadplane.update();
 
     if (control_mode == AUTO && auto_state.idle_mode) {
         // special handling for balloon launch
@@ -558,7 +558,7 @@ void Plane::set_servos(void)
     if (control_mode == TRAINING) {
         steering_control.rudder = channel_rudder->get_control_in();
     }
-    
+
     SRV_Channels::set_output_scaled(SRV_Channel::k_rudder, steering_control.rudder);
     SRV_Channels::set_output_scaled(SRV_Channel::k_steering, steering_control.steering);
 
@@ -570,7 +570,7 @@ void Plane::set_servos(void)
 
     // setup flap outputs
     set_servos_flaps();
-    
+
     if (control_mode >= FLY_BY_WIRE_B ||
         quadplane.in_assisted_flight() ||
         quadplane.in_vtol_mode()) {
@@ -582,7 +582,7 @@ void Plane::set_servos(void)
     if (!arming.is_armed()) {
         //Some ESCs get noisy (beep error msgs) if PWM == 0.
         //This little segment aims to avoid this.
-        switch (arming.arming_required()) { 
+        switch (arming.arming_required()) {
         case AP_Arming::NO:
             //keep existing behavior: do nothing to radio_out
             //(don't disarm throttle channel even if AP_Arming class is)
@@ -655,10 +655,10 @@ void Plane::servos_output(void)
 
     // cope with tailsitters
     quadplane.tailsitter_output();
-    
+
     // the mixers need pwm to be calculated now
     SRV_Channels::calc_pwm();
-    
+
     // run vtail and elevon mixers
     servo_output_mixers();
 
@@ -666,11 +666,11 @@ void Plane::servos_output(void)
     if (g2.manual_rc_mask.get() != 0 && control_mode == MANUAL) {
         SRV_Channels::copy_radio_in_out_mask(uint16_t(g2.manual_rc_mask.get()));
     }
-    
+
     SRV_Channels::calc_pwm();
 
     SRV_Channels::output_ch_all();
-    
+
     hal.rcout->push();
 
     if (g2.servo_channels.auto_trim_enabled()) {
@@ -716,7 +716,7 @@ void Plane::servos_auto_trim(void)
     // adjust trim on channels by a small amount according to I value
     float roll_I = rollController.get_pid_info().I;
     float pitch_I = pitchController.get_pid_info().I;
-    
+
     g2.servo_channels.adjust_trim(SRV_Channel::k_aileron, roll_I);
     g2.servo_channels.adjust_trim(SRV_Channel::k_elevator, pitch_I);
 
@@ -733,12 +733,12 @@ void Plane::servos_auto_trim(void)
     g2.servo_channels.adjust_trim(SRV_Channel::k_dspoilerLeft2,  pitch_I - roll_I);
     g2.servo_channels.adjust_trim(SRV_Channel::k_dspoilerRight1, pitch_I + roll_I);
     g2.servo_channels.adjust_trim(SRV_Channel::k_dspoilerRight2, pitch_I + roll_I);
-    
+
     auto_trim.last_trim_check = now;
 
     if (now - auto_trim.last_trim_save > 10000) {
         auto_trim.last_trim_save = now;
         g2.servo_channels.save_trim();
     }
-    
+
 }

@@ -287,6 +287,60 @@ const AP_Param::Info Plane::var_info[] = {
     // @User: Standard
     GSCALAR(rtl_radius,             "RTL_RADIUS",  0),
 
+    // @Param: MARC_OFFSET_NORTH
+    // @DisplayName: Marc Offset North
+    // @Description: Defines the distance the plane moves to heading north/south when in Marc mode. If the value is positive, the plane will head NORTH. If the value is negative, the plane will head SOUTH.
+    // @Units: m
+    // @Range: -32767 32767
+    // @Increment: 1
+    // @User: Standard
+    GSCALAR(marc_offset_nort,          "MARC_OFFSET_NORT",  MARC_OFFSET_NORT_DEFAULT),
+
+    // @Param: MARC_OFFSET_EAST
+    // @DisplayName: Marc Offset East
+    // @Description: Defines the distance the plane moves to heading east/west when in Marc mode. If the value is positive, the plane will head EAST. If the value is negative, the plane will head WEST.
+    // @Units: m
+    // @Range: -32767 32767
+    // @Increment: 1
+    // @User: Standard
+    GSCALAR(marc_offset_east,          "MARC_OFFSET_EAST",  MARC_OFFSET_EAST_DEFAULT),
+
+    // @Param: MARC_RADIUS
+    // @DisplayName: Marc radius
+    // @Description: Defines the radius of the loiter circle when in Marc mode. If the radius is negative then a counter-clockwise is used. If positive then a clockwise loiter is used.
+    // @Units: m
+    // @Range: -32767 32767
+    // @Increment: 1
+    // @User: Standard
+    GSCALAR(marc_radius,          "MARC_RADIUS",  MARC_RADIUS_DEFAULT),
+
+    // @Param: CORK_ALT
+    // @DisplayName: Corkscrew altitude
+    // @Description: Corkscrew target altitude. This is the relative altitude the plane will aim for and return home.
+    // @Units: m
+    // @Range: -32767 32767
+    // @Increment: 1
+    // @User: Standard
+    GSCALAR(cork_alt,          "CORK_ALT",  CORK_ALT_DEFAULT),
+
+    // @Param: CORK_RADIUS
+    // @DisplayName: Corkscrew radius
+    // @Description: Defines the radius of the corkscrew circle when in Corkscrew mode. If the radius is negative then a counter-clockwise is used. If positive then a clockwise loiter is used.
+    // @Units: m
+    // @Range: -32767 32767
+    // @Increment: 1
+    // @User: Standard
+    GSCALAR(cork_radius,          "CORK_RADIUS",  CORK_RADIUS_DEFAULT),
+
+    // @Param: CORK_RTL_RADIUS
+    // @DisplayName: Corkscrew RTL radius
+    // @Description: Defines the radius of the RTL circle when in Corkscrew mode. If the radius is negative then a counter-clockwise is used. If positive then a clockwise loiter is used.
+    // @Units: m
+    // @Range: -32767 32767
+    // @Increment: 1
+    // @User: Standard
+    GSCALAR(cork_rtl_radius,          "CORK_RTL_RADIUS",  CORK_RTL_RADIUS_DEFAULT),
+
 #if GEOFENCE_ENABLED == ENABLED
     // @Param: FENCE_ACTION
     // @DisplayName: Action on geofence breach

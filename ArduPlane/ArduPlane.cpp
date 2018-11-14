@@ -844,6 +844,7 @@ void Plane::update_navigation()
     case LOITER:
     case AVOID_ADSB:
     case GUIDED:
+  //  case CORKSCREW:
         update_loiter(radius);
         break;
 

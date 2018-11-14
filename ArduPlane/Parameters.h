@@ -97,7 +97,7 @@ public:
         k_param_skip_gyro_cal, // unused
         k_param_auto_fbw_steer,
         k_param_waypoint_max_radius,
-        k_param_ground_steer_alt,        
+        k_param_ground_steer_alt,
         k_param_ground_steer_dps,
         k_param_rally_limit_km_old, //unused anymore -- just holding this index
         k_param_hil_err_limit,
@@ -158,7 +158,7 @@ public:
         k_param_fence_autoenable,
         k_param_fence_ret_rally,
         k_param_q_attitude_control,
-        k_param_takeoff_pitch_limit_reduction_sec,
+        k_param_takeoff_pitch_limit_reduction_sec, //109
 
         // 110: Telemetry control
         //
@@ -171,7 +171,7 @@ public:
         k_param_serial0_baud_old,   // deprecated
         k_param_gcs2,               // stream rates for uartD
         k_param_serial2_baud_old,   // deprecated
-        k_param_serial2_protocol,   // deprecated
+        k_param_serial2_protocol,   // deprecated //119
 
         // 120: Fly-by-wire control
         //
@@ -223,7 +223,7 @@ public:
         k_param_RTL_altitude_cm,
         k_param_inverted_flight_ch,
         k_param_min_gndspeed_cm,
-        k_param_crosstrack_use_wind, // unused
+        k_param_crosstrack_use_wind, // unused //159
 
 
         //
@@ -257,15 +257,15 @@ public:
         k_param_rc_8_old,
         k_param_rc_9_old,
         k_param_rc_10_old,
-        k_param_rc_11_old,
+        k_param_rc_11_old, //180
 
-        k_param_throttle_min,
+        k_param_throttle_min, //181
         k_param_throttle_max,
         k_param_throttle_fs_enabled,
         k_param_throttle_fs_value,
         k_param_throttle_cruise,
 
-        k_param_short_fs_action,
+        k_param_short_fs_action, //186
         k_param_long_fs_action,
         k_param_gcs_heartbeat_fs_enabled,
         k_param_throttle_slewrate,
@@ -278,7 +278,7 @@ public:
         k_param_long_fs_timeout,
         k_param_rc_13_old,
         k_param_rc_14_old,
-        k_param_tuning,
+        k_param_tuning, //199
 
         //
         // 200: Feed-forward gains
@@ -292,7 +292,7 @@ public:
         k_param_rtl_radius,
         k_param_land_then_servos_neutral,   // unused - moved to AP_Landing
         k_param_rc_15_old,
-        k_param_rc_16_old,
+        k_param_rc_16_old, //209
 
         //
         // 210: flight modes
@@ -306,7 +306,7 @@ public:
         k_param_flight_mode6,
         k_param_initial_mode,
         k_param_land_slope_recalc_shallow_threshold,    // unused - moved to AP_Landing
-        k_param_land_slope_recalc_steep_threshold_to_abort, // unused - moved to AP_Landing
+        k_param_land_slope_recalc_steep_threshold_to_abort, // unused - moved to AP_Landing //219
 
         //
         // 220: Waypoint data
@@ -320,7 +320,7 @@ public:
         k_param_fence_total,
         k_param_fence_channel,
         k_param_fence_minalt,
-        k_param_fence_maxalt,
+        k_param_fence_maxalt, //229
 
         // other objects
         k_param_sitl = 230,
@@ -332,7 +332,7 @@ public:
         k_param_rcmap,
         k_param_TECS_controller,
         k_param_rally_total_old,  //unused
-        k_param_steerController,
+        k_param_steerController, //239
 
         //
         // 240: PID Controllers
@@ -341,12 +341,22 @@ public:
         k_param_pidServoPitch, // unused
         k_param_pidNavPitchAirspeed, // unused
         k_param_pidServoRudder, // unused
-        k_param_pidTeThrottle, // unused
-        k_param_pidNavPitchAltitude, // unused
-        k_param_pidWheelSteer, // unused
+        // k_param_pidTeThrottle, // unused
+        // k_param_pidNavPitchAltitude, // unused
+        // k_param_pidWheelSteer, // unused
+
+        //MARC parameters
+        k_param_marc_offset_nort, //245
+        k_param_marc_offset_east, //246
+        k_param_marc_radius, //247
 
         k_param_mixing_offset,
-        k_param_dspoiler_rud_rate,
+        k_param_dspoiler_rud_rate, //249
+
+        //CORKSCREW parameters
+        k_param_cork_alt, //250
+        k_param_cork_radius, //251
+        k_param_cork_rtl_radius, //252
 
         k_param_DataFlash = 253, // Logging Group
 
@@ -398,6 +408,16 @@ public:
     AP_Int16 waypoint_radius;
     AP_Int16 waypoint_max_radius;
     AP_Int16 rtl_radius;
+
+    //MARC parameters
+    AP_Int16 marc_offset_nort;
+    AP_Int16 marc_offset_east;
+    AP_Int16 marc_radius;
+
+    //CORKSCREW
+    AP_Int16 cork_alt;
+    AP_Int16 cork_radius;
+    AP_Int16 cork_rtl_radius;
 
 #if GEOFENCE_ENABLED == ENABLED
     AP_Int8 fence_action;
@@ -475,7 +495,7 @@ public:
     AP_Int8 flap_1_speed;
     AP_Int8 flap_2_percent;
     AP_Int8 flap_2_speed;
-    AP_Int8 takeoff_flap_percent;  
+    AP_Int8 takeoff_flap_percent;
     AP_Int8 inverted_flight_ch;             // 0=disabled, 1-8 is channel for inverted flight trigger
     AP_Int8 stick_mixing;
     AP_Float takeoff_throttle_min_speed;
@@ -526,13 +546,13 @@ public:
 
     // RC input channels
     RC_Channels rc_channels;
-    
+
     // control over servo output ranges
     SRV_Channels servo_channels;
 
     // whether to enforce acceptance of packets only from sysid_my_gcs
     AP_Int8 sysid_enforce;
-    
+
     // ArduSoar parameters
     SoaringController soaring_controller;
 

@@ -301,6 +301,36 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// Marc defaults
+//
+#ifndef MARC_OFFSET_NORT_DEFAULT
+ # define MARC_OFFSET_NORT_DEFAULT 300
+#endif
+
+#ifndef MARC_OFFSET_EAST_DEFAULT
+ # define MARC_OFFSET_EAST_DEFAULT 0
+#endif
+
+#ifndef MARC_RADIUS_DEFAULT
+ # define MARC_RADIUS_DEFAULT 40
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// Corkscrew defaults
+//
+#ifndef CORK_ALT_DEFAULT
+ # define CORK_ALT_DEFAULT 150
+#endif
+
+#ifndef CORK_RADIUS_DEFAULT
+ # define CORK_RADIUS_DEFAULT 40
+#endif
+
+#ifndef CORK_RTL_RADIUS_DEFAULT
+ # define CORK_RTL_RADIUS_DEFAULT 40
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
 // Developer Items
 //
 
@@ -345,4 +375,3 @@
 #else
 # define HAVE_PX4_MIXER 0
 #endif
-

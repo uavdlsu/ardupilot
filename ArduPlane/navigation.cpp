@@ -1,4 +1,6 @@
 #include "Plane.h"
+//static int16_t flag_cork;
+bool result_cork;
 
 // set the nav_controller pointer to the right controller
 void Plane::set_nav_controller(void)
@@ -212,12 +214,12 @@ void Plane::update_loiter(uint16_t radius)
 
 void Plane::update_marc()
 {
-        if (get_distance(current_loc, next_WP_loc) > 150) {
+        if (get_distance(current_loc, next_WP_loc) > (g.marc_radius*3)) {
         // if never reached loiter point and using crosstrack and somewhat far away from loiter point
         // navigate to it like in auto-mode for normal crosstrack behavior
         nav_controller->update_waypoint(prev_WP_loc, next_WP_loc);
         } else {
-        nav_controller->update_loiter(next_WP_loc, 50, 1);
+        nav_controller->update_loiter(next_WP_loc, g.marc_radius, g.marc_radius/labs(g.marc_radius));
     }
 }
 
@@ -234,14 +236,40 @@ void Plane::update_marked_rtl()
 
 void Plane::update_corkscrew()
 {
-        if (get_distance(current_loc, next_WP_loc) > 150) {
-        // if never reached loiter point and using crosstrack and somewhat far away from loiter point
-        // navigate to it like in auto-mode for normal crosstrack behavior
-        nav_controller->update_waypoint(prev_WP_loc, next_WP_loc);
-        } else {
-        nav_controller->update_loiter(next_WP_loc, 50, 1);
-    }
+  /////-------10/25 , TEST 8-------/////
+  hal.console->printf("updating loiter\n current alt: %f\n target alt: %f\n",(double)current_loc.alt/100,(double)target_altitude.amsl_cm/100);
+  update_loiter(cork_rad); // EDIT RADIUS
+
+  // condition_value == 0 means alt has never been reached
+  if (condition_value == 0) {
+      // primary goal, loiter to alt
+      hal.console->printf("CORKSCREW\n");
+      if (loiter.reached_target_alt) {
+          // primary goal completed, initialize secondary heading goal
+
+          hal.console->printf("RTL\n");
+          condition_value = 1;
+          result_cork = verify_loiter_heading(true);
+
+          Location home_loc = ahrs.get_home();
+          home_loc.alt = current_loc.alt;
+          cork_rad = labs(g.cork_rtl_radius);
+          loiter.direction = g.cork_rtl_radius/labs(g.cork_rtl_radius);
+          location_sanitize(current_loc, home_loc);
+          set_next_WP(home_loc);
+          gcs().send_text(MAV_SEVERITY_INFO,"RTL");
+          gcs().send_text(MAV_SEVERITY_INFO, "Target alt: %f\n", (double)target_altitude.amsl_cm/100);
+      }
+  } else {
+      // secondary goal, loiter to heading
+      result_cork = verify_loiter_heading(false);
+  }
+
+  if (result_cork) {
+      hal.console->printf("Loiter to alt complete\n");
+  }
 }
+
 
 /*
   handle CRUISE mode, locking heading to GPS course when we have

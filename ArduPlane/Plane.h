@@ -670,6 +670,8 @@ private:
     // For example in a change altitude command, it is the altitude to change to.
     int32_t condition_value;
 
+    int32_t cork_rad;
+
     // A starting value used to check the status of a conditional command.
     // For example in a delay command the condition_start records that start time for the delay
     uint32_t condition_start;
